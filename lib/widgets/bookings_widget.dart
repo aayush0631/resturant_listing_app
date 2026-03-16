@@ -184,14 +184,14 @@ class _BookingsWidgetState extends State<BookingsWidget> {
                               initialDate: DateTime.now(),
                               firstDate: DateTime.now(),
                               lastDate: DateTime.now().add(
-                                const Duration(days: 365),
+                                const Duration(days: 30),
                               ),
                             );
                             if (picked != null) {
                               setState(() => _selectedDate = picked);
                               state.didChange(
                                 picked,
-                              ); // 👈 tells FormField its value changed
+                              );
                             }
                           },
                           child: Container(
