@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:week4/models/resturant_list.dart';
 import 'package:week4/widgets/bookings_widget.dart';
+import 'package:week4/models/booking.dart';
 
 class ResturantDescriptionScreen extends StatefulWidget {
-  const ResturantDescriptionScreen({super.key, required this.resturant});
   final ResturantList resturant;
+  final Function(Booking) onAddBooking;
+  const ResturantDescriptionScreen({super.key, required this.resturant,required this.onAddBooking});
 
   @override
   State<ResturantDescriptionScreen> createState() => _ResturantDescriptionScreenState();
@@ -56,11 +58,14 @@ class _ResturantDescriptionScreenState extends State<ResturantDescriptionScreen>
                     onPressed: () {
                       showModalBottomSheet(
                         context: context,
-                        isScrollControlled: true, // 👈 lets it resize when keyboard opens
+                        isScrollControlled: true, 
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                         ),
-                        builder: (context) => BookingsWidget(resturant: widget.resturant),
+                        builder: (context) => BookingsWidget(
+                          resturant: widget.resturant,
+                          onAddBooking:widget.onAddBooking
+                        ),
                       );
                     },
                     icon: const Icon(Icons.book_online_outlined),

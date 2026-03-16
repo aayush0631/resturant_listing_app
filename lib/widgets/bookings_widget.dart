@@ -4,8 +4,9 @@ import 'package:week4/models/resturant_list.dart';
 
 class BookingsWidget extends StatefulWidget {
   final ResturantList resturant;
+  final Function(Booking) onAddBooking;
 
-  const BookingsWidget({super.key, required this.resturant});
+  const BookingsWidget({super.key, required this.resturant,required this.onAddBooking});
 
   @override
   State<BookingsWidget> createState() => _BookingsWidgetState();
@@ -38,7 +39,7 @@ class _BookingsWidgetState extends State<BookingsWidget> {
         numberOfGuests: int.parse(_noOfGuestsController.text),
       );
 
-      print(booking.customerName);
+      widget.onAddBooking(booking);
 
       Navigator.pop(context);
     }

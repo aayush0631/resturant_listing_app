@@ -2,15 +2,21 @@ import 'package:flutter/material.dart';
 import '../widgets/app_bottom_bar.dart';
 import 'package:week4/models/resturant_list.dart';
 import 'package:week4/widgets/resturant_card_widget.dart';
+import 'package:week4/models/booking.dart';
+import 'package:week4/resturantAppPages/bookings_listing_screen.dart';
 
 class Resturantlistingpage extends StatefulWidget {
   final VoidCallback onToggleTheme;
   final ThemeMode themeMode;
-
+  final List<Booking> bookings;         
+  final Function(Booking) onAddBooking; 
+  
   const Resturantlistingpage({
     super.key,
     required this.onToggleTheme,
     required this.themeMode,
+    required this.bookings,
+    required this.onAddBooking,
   });
 
   @override
@@ -28,6 +34,15 @@ class _Resturantlistingpage extends State<Resturantlistingpage> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> pages=[
+    _RestaurantListBody(onAddBooking: widget.onAddBooking),
+    BookingsListingScreen(
+      bookings: widget.bookings,
+      onToggleTheme: widget.onToggleTheme,
+      themeMode: widget.themeMode,
+    ),
+    const Center(child: Text("Settings coming soon")),
+  ];
     return Scaffold(
         appBar: AppBar(
           title: const Text("Restaurants"),
@@ -47,27 +62,40 @@ class _Resturantlistingpage extends State<Resturantlistingpage> {
             )
           ],
         ),
-        body: ListView.builder(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          itemCount: restaurantData.length,
-          itemBuilder: (context, index) {
-            final resturant = restaurantData[index];
-            return ResturantWidget(
-              resturant: resturant,
-              onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  '/description',
-                  arguments: resturant,
-                );
-              },
-            );
-          },
-        ),
+        body: pages[_currentPage],
         bottomNavigationBar: AppBottomBar(
           currentIndex: _currentPage,
           onTap: pageChanger,
         ),
+    );
+  }
+}
+class _RestaurantListBody extends StatelessWidget {
+  final Function(Booking) onAddBooking;
+
+  const _RestaurantListBody({required this.onAddBooking});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      itemCount: restaurantData.length,
+      itemBuilder: (context, index) {
+        final resturant = restaurantData[index];
+        return ResturantWidget(
+          resturant: resturant,
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              '/description',
+              arguments: {
+                'resturant': resturant,
+                'onAddBooking': onAddBooking,
+              },
+            );
+          },
+        );
+      },
     );
   }
 }
