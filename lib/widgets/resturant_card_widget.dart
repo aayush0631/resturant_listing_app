@@ -8,7 +8,6 @@ class ResturantWidget extends StatelessWidget {
     required this.onTap,
   });
   final ResturantList resturant;
-  
   final dynamic onTap;
   @override
   Widget build(BuildContext context) {

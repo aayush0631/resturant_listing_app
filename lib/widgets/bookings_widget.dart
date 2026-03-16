@@ -14,8 +14,8 @@ class BookingsWidget extends StatefulWidget {
 }
 
 class _BookingsWidgetState extends State<BookingsWidget> {
-  final _formKey = GlobalKey<FormState>(); // 👈 needs <FormState> not just GlobalKey
-  final _usernameController = TextEditingController(); // 👈 initialise directly, no need for ?
+  final _formKey = GlobalKey<FormState>(); 
+  final _usernameController = TextEditingController(); 
   final _emailController = TextEditingController();
   final _noOfGuestsController = TextEditingController();
   DateTime? _selectedDate;
@@ -61,6 +61,7 @@ class _BookingsWidgetState extends State<BookingsWidget> {
         date: _selectedDate,
         numberOfGuests: int.parse(_noOfGuestsController.text),
       );
+      
     }
     widget.onAddBooking(booking);
     Navigator.pop(context);

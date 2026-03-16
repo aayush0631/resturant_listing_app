@@ -24,9 +24,9 @@ class Booking {
     int? numberOfGuests,
   }) {
     return Booking(
-      id: id,                                        
-      restaurantId: restaurantId,                    
-      restaurantName: restaurantName,                
+      id: id,
+      restaurantId: restaurantId,
+      restaurantName: restaurantName,
       customerName: customerName ?? this.customerName,
       customerEmail: customerEmail ?? this.customerEmail,
       date: date ?? this.date,

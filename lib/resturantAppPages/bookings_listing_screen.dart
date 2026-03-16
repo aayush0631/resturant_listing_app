@@ -204,19 +204,21 @@ class BookingsListingScreenState extends State<BookingsListingScreen> {
                             icon: const Icon(Icons.delete),
                         ),
                         IconButton(
-                          onPressed: () => {
-                              showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true, 
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                                ),
-                                builder: (context) => BookingsWidget(
-                                  resturant: resturant,
-                                  onAddBooking:widget.onAddBooking
-                                ),
-                              )
-                            },
+                          onPressed: () async {
+                            await showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                              ),
+                              builder: (context) => BookingsWidget(
+                                resturant: resturant,
+                                onAddBooking: widget.onAddBooking,
+                                existingBookings: booking,
+                              ),
+                            );
+                            _deleteBooking(booking);
+                          },
                           icon: Icon(Icons.edit)
                         ),
                       ],
