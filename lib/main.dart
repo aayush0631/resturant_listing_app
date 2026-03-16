@@ -9,18 +9,36 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  ThemeMode _themeMode = ThemeMode.light;
+
+  void _toggleTheme() {
+    setState(() {
+      _themeMode = _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Restaurant App',
       debugShowCheckedModeBanner: false,
-      initialRoute: '/', // starting route
+      themeMode: _themeMode,
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      initialRoute: '/',
       routes: {
-        '/': (context) => const Resturantlistingpage(),
-        // Named route for description screen – we'll pass arguments via RouteSettings
+        '/': (context) => Resturantlistingpage(
+              onToggleTheme: _toggleTheme,
+              themeMode: _themeMode,
+            ),
         '/description': (context) {
           final args = ModalRoute.of(context)!.settings.arguments as ResturantList;
           return ResturantDescriptionScreen(resturant: args);

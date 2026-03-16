@@ -2,17 +2,23 @@ import 'package:flutter/material.dart';
 import '../widgets/app_bottom_bar.dart';
 import 'package:week4/models/resturant_list.dart';
 import 'package:week4/widgets/resturant_card_widget.dart';
-import 'package:week4/resturantAppPages/resturant_description_screen.dart';
 
 class Resturantlistingpage extends StatefulWidget {
-  const Resturantlistingpage({super.key});
+  final VoidCallback onToggleTheme;
+  final ThemeMode themeMode;
+
+  const Resturantlistingpage({
+    super.key,
+    required this.onToggleTheme,
+    required this.themeMode,
+  });
+
   @override
   State<Resturantlistingpage> createState() => _Resturantlistingpage();
 }
 
 class _Resturantlistingpage extends State<Resturantlistingpage> {
   int _currentPage = 0;
-  bool isDarkMode = false;
 
   void pageChanger(int index) {
     setState(() {
@@ -20,17 +26,9 @@ class _Resturantlistingpage extends State<Resturantlistingpage> {
     });
   }
 
-  void changeMode() {
-    setState(() {
-      isDarkMode = !isDarkMode;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: isDarkMode ? ThemeData.dark() : ThemeData.light(),
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: const Text("Restaurants"),
           centerTitle: true,
@@ -42,9 +40,11 @@ class _Resturantlistingpage extends State<Resturantlistingpage> {
           leading: const Icon(Icons.restaurant_menu),
           actions: [
             IconButton(
-              icon: Icon(isDarkMode ? Icons.dark_mode : Icons.light_mode),
-              onPressed: changeMode,
-            ),
+              onPressed: widget.onToggleTheme,
+              icon: Icon(
+                widget.themeMode == ThemeMode.light ? Icons.dark_mode : Icons.light_mode,
+              ),
+            )
           ],
         ),
         body: ListView.builder(
@@ -68,7 +68,6 @@ class _Resturantlistingpage extends State<Resturantlistingpage> {
           currentIndex: _currentPage,
           onTap: pageChanger,
         ),
-      ),
     );
   }
 }
