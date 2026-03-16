@@ -1,4 +1,4 @@
-enum Ratings {poor,average,good,verygood,excelent}
+enum Ratings { poor, average, good, verygood, excelent }
 
 class ResturantList {
   String id;
@@ -21,6 +21,7 @@ class ResturantList {
     required this.ratings,
   });
 }
+
 final List<ResturantList> restaurantData = [
   ResturantList(
     id: "1",

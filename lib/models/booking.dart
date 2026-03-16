@@ -30,7 +30,7 @@ class Booking {
       customerName: customerName ?? this.customerName,
       customerEmail: customerEmail ?? this.customerEmail,
       date: date ?? this.date,
-      numberOfGuests: numberOfGuests ?? this.numberOfGuests, 
+      numberOfGuests: numberOfGuests ?? this.numberOfGuests,
     );
   }
 }

@@ -186,7 +186,6 @@ class _FlutterLayoutArticleState extends State<FlutterLayoutArticle> {
   }
 }
 
-
 class Button extends StatelessWidget {
   final bool isSelected;
   final int exampleNumber;

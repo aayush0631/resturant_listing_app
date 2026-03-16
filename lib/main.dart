@@ -22,10 +22,13 @@ class _MyAppState extends State<MyApp> {
 
   void _toggleTheme() {
     setState(() {
-      _themeMode = _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+      _themeMode = _themeMode == ThemeMode.light
+          ? ThemeMode.dark
+          : ThemeMode.light;
     });
   }
-  final List<Booking> _bookings=[];
+
+  final List<Booking> _bookings = [];
   void _addBooking(Booking booking) {
     setState(() => _bookings.add(booking)); // 👈 Updates everywhere
   }
@@ -41,16 +44,19 @@ class _MyAppState extends State<MyApp> {
       initialRoute: '/',
       routes: {
         '/': (context) => Resturantlistingpage(
-              bookings: _bookings,
-              onAddBooking: _addBooking,
-              onToggleTheme: _toggleTheme,
-              themeMode: _themeMode,
-            ),
+          bookings: _bookings,
+          onAddBooking: _addBooking,
+          onToggleTheme: _toggleTheme,
+          themeMode: _themeMode,
+        ),
         '/description': (context) {
-          final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>; // 👈 Map not ResturantList
+          final args =
+              ModalRoute.of(context)!.settings.arguments
+                  as Map<String, dynamic>; // 👈 Map not ResturantList
           return ResturantDescriptionScreen(
             resturant: args['resturant'] as ResturantList,
-            onAddBooking: args['onAddBooking'] as Function(Booking), // 👈 Pass it down
+            onAddBooking:
+                args['onAddBooking'] as Function(Booking), // 👈 Pass it down
           );
         },
       },

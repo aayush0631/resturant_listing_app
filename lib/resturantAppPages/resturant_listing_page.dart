@@ -8,9 +8,9 @@ import 'package:week4/resturantAppPages/bookings_listing_screen.dart';
 class Resturantlistingpage extends StatefulWidget {
   final VoidCallback onToggleTheme;
   final ThemeMode themeMode;
-  final List<Booking> bookings;         
-  final Function(Booking) onAddBooking; 
-  
+  final List<Booking> bookings;
+  final Function(Booking) onAddBooking;
+
   const Resturantlistingpage({
     super.key,
     required this.onToggleTheme,
@@ -34,43 +34,46 @@ class _Resturantlistingpage extends State<Resturantlistingpage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> pages=[
-    _RestaurantListBody(onAddBooking: widget.onAddBooking),
-    BookingsListingScreen(
-      bookings: widget.bookings,
-      onToggleTheme: widget.onToggleTheme,
-      themeMode: widget.themeMode,
-      onAddBooking: widget.onAddBooking,
-    ),
-    const Center(child: Text("Settings coming soon")),
-  ];
+    List<Widget> pages = [
+      _RestaurantListBody(onAddBooking: widget.onAddBooking),
+      BookingsListingScreen(
+        bookings: widget.bookings,
+        onToggleTheme: widget.onToggleTheme,
+        themeMode: widget.themeMode,
+        onAddBooking: widget.onAddBooking,
+      ),
+      const Center(child: Text("Settings coming soon")),
+    ];
     return Scaffold(
-        appBar: AppBar(
-          title: const Text("Restaurants"),
-          centerTitle: true,
-          backgroundColor: Colors.red.shade600,
-          elevation: 4,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+      appBar: AppBar(
+        title: const Text("Restaurants"),
+        centerTitle: true,
+        backgroundColor: Colors.red.shade600,
+        elevation: 4,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+        ),
+        leading: const Icon(Icons.restaurant_menu),
+        actions: [
+          IconButton(
+            onPressed: widget.onToggleTheme,
+            icon: Icon(
+              widget.themeMode == ThemeMode.light
+                  ? Icons.dark_mode
+                  : Icons.light_mode,
+            ),
           ),
-          leading: const Icon(Icons.restaurant_menu),
-          actions: [
-            IconButton(
-              onPressed: widget.onToggleTheme,
-              icon: Icon(
-                widget.themeMode == ThemeMode.light ? Icons.dark_mode : Icons.light_mode,
-              ),
-            )
-          ],
-        ),
-        body: pages[_currentPage],
-        bottomNavigationBar: AppBottomBar(
-          currentIndex: _currentPage,
-          onTap: pageChanger,
-        ),
+        ],
+      ),
+      body: pages[_currentPage],
+      bottomNavigationBar: AppBottomBar(
+        currentIndex: _currentPage,
+        onTap: pageChanger,
+      ),
     );
   }
 }
+
 class _RestaurantListBody extends StatelessWidget {
   final Function(Booking) onAddBooking;
 
@@ -89,10 +92,7 @@ class _RestaurantListBody extends StatelessWidget {
             Navigator.pushNamed(
               context,
               '/description',
-              arguments: {
-                'resturant': resturant,
-                'onAddBooking': onAddBooking,
-              },
+              arguments: {'resturant': resturant, 'onAddBooking': onAddBooking},
             );
           },
         );

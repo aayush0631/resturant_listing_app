@@ -7,27 +7,33 @@ class BookingsWidget extends StatefulWidget {
   final Function(Booking) onAddBooking;
   final Booking? existingBookings;
 
-  const BookingsWidget({super.key, required this.resturant,required this.onAddBooking,this.existingBookings});
+  const BookingsWidget({
+    super.key,
+    required this.resturant,
+    required this.onAddBooking,
+    this.existingBookings,
+  });
 
   @override
   State<BookingsWidget> createState() => _BookingsWidgetState();
 }
 
 class _BookingsWidgetState extends State<BookingsWidget> {
-  final _formKey = GlobalKey<FormState>(); 
-  final _usernameController = TextEditingController(); 
+  final _formKey = GlobalKey<FormState>();
+  final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _noOfGuestsController = TextEditingController();
   DateTime? _selectedDate;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    if(widget.existingBookings  !=null){
-    _usernameController.text = widget.existingBookings!.customerName;
-    _emailController.text = widget.existingBookings!.customerEmail;
-    _noOfGuestsController.text = widget.existingBookings!.numberOfGuests.toString();
-    _selectedDate = widget.existingBookings!.date;
+    if (widget.existingBookings != null) {
+      _usernameController.text = widget.existingBookings!.customerName;
+      _emailController.text = widget.existingBookings!.customerEmail;
+      _noOfGuestsController.text = widget.existingBookings!.numberOfGuests
+          .toString();
+      _selectedDate = widget.existingBookings!.date;
     }
   }
 
@@ -41,7 +47,7 @@ class _BookingsWidgetState extends State<BookingsWidget> {
 
   void _submitForm() {
     late final Booking booking;
-    if (widget.existingBookings==null) {
+    if (widget.existingBookings == null) {
       if (_formKey.currentState!.validate()) {
         booking = Booking(
           id: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -53,15 +59,13 @@ class _BookingsWidgetState extends State<BookingsWidget> {
           numberOfGuests: int.parse(_noOfGuestsController.text),
         );
       }
-    }
-    else{
+    } else {
       booking = widget.existingBookings!.copyWith(
         customerName: _usernameController.text.trim(),
         customerEmail: _emailController.text.trim(),
         date: _selectedDate,
         numberOfGuests: int.parse(_noOfGuestsController.text),
       );
-      
     }
     widget.onAddBooking(booking);
     Navigator.pop(context);
@@ -72,12 +76,15 @@ class _BookingsWidgetState extends State<BookingsWidget> {
     return BottomSheet(
       onClosing: () {},
       builder: (context) {
-        return SingleChildScrollView( // 👈 prevents overflow when keyboard opens
+        return SingleChildScrollView(
+          // 👈 prevents overflow when keyboard opens
           padding: EdgeInsets.only(
             left: 20,
             right: 20,
             top: 20,
-            bottom: MediaQuery.of(context).viewInsets.bottom + 20, // 👈 keyboard push up
+            bottom:
+                MediaQuery.of(context).viewInsets.bottom +
+                20, // 👈 keyboard push up
           ),
           child: Form(
             key: _formKey,
@@ -176,11 +183,15 @@ class _BookingsWidgetState extends State<BookingsWidget> {
                               context: context,
                               initialDate: DateTime.now(),
                               firstDate: DateTime.now(),
-                              lastDate: DateTime.now().add(const Duration(days: 365)),
+                              lastDate: DateTime.now().add(
+                                const Duration(days: 365),
+                              ),
                             );
                             if (picked != null) {
                               setState(() => _selectedDate = picked);
-                              state.didChange(picked); // 👈 tells FormField its value changed
+                              state.didChange(
+                                picked,
+                              ); // 👈 tells FormField its value changed
                             }
                           },
                           child: Container(
@@ -188,20 +199,27 @@ class _BookingsWidgetState extends State<BookingsWidget> {
                             decoration: BoxDecoration(
                               border: Border.all(
                                 // 👈 red border if error, grey if not
-                                color: state.hasError ? Colors.red : Colors.grey,
+                                color: state.hasError
+                                    ? Colors.red
+                                    : Colors.grey,
                               ),
                               borderRadius: BorderRadius.circular(4),
                             ),
                             child: Row(
                               children: [
-                                const Icon(Icons.calendar_today, color: Colors.grey),
+                                const Icon(
+                                  Icons.calendar_today,
+                                  color: Colors.grey,
+                                ),
                                 const SizedBox(width: 12),
                                 Text(
                                   _selectedDate == null
                                       ? 'Select a Date'
                                       : '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}',
                                   style: TextStyle(
-                                    color: _selectedDate == null ? Colors.grey : Colors.black,
+                                    color: _selectedDate == null
+                                        ? Colors.grey
+                                        : Colors.black,
                                     fontSize: 16,
                                   ),
                                 ),
@@ -214,7 +232,10 @@ class _BookingsWidgetState extends State<BookingsWidget> {
                             padding: const EdgeInsets.only(top: 6, left: 12),
                             child: Text(
                               state.errorText!,
-                              style: const TextStyle(color: Colors.red, fontSize: 12),
+                              style: const TextStyle(
+                                color: Colors.red,
+                                fontSize: 12,
+                              ),
                             ),
                           ),
                       ],
@@ -226,7 +247,7 @@ class _BookingsWidgetState extends State<BookingsWidget> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed:_submitForm,
+                    onPressed: _submitForm,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red.shade600,
                       foregroundColor: Colors.white,

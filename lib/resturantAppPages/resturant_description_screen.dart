@@ -6,13 +6,19 @@ import 'package:week4/models/booking.dart';
 class ResturantDescriptionScreen extends StatefulWidget {
   final ResturantList resturant;
   final Function(Booking) onAddBooking;
-  const ResturantDescriptionScreen({super.key, required this.resturant,required this.onAddBooking});
+  const ResturantDescriptionScreen({
+    super.key,
+    required this.resturant,
+    required this.onAddBooking,
+  });
 
   @override
-  State<ResturantDescriptionScreen> createState() => _ResturantDescriptionScreenState();
+  State<ResturantDescriptionScreen> createState() =>
+      _ResturantDescriptionScreenState();
 }
 
-class _ResturantDescriptionScreenState extends State<ResturantDescriptionScreen> {
+class _ResturantDescriptionScreenState
+    extends State<ResturantDescriptionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,9 +47,13 @@ class _ResturantDescriptionScreenState extends State<ResturantDescriptionScreen>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(widget.resturant.name,
-                      style: const TextStyle(
-                          fontSize: 24, fontWeight: FontWeight.bold)),
+                  Text(
+                    widget.resturant.name,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   const SizedBox(height: 8),
                   Text(widget.resturant.ratings.name),
                   const SizedBox(height: 8),
@@ -60,21 +70,23 @@ class _ResturantDescriptionScreenState extends State<ResturantDescriptionScreen>
                         onPressed: () {
                           showModalBottomSheet(
                             context: context,
-                            isScrollControlled: true, 
+                            isScrollControlled: true,
                             shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(20),
+                              ),
                             ),
                             builder: (context) => BookingsWidget(
                               resturant: widget.resturant,
-                              onAddBooking:widget.onAddBooking
+                              onAddBooking: widget.onAddBooking,
                             ),
                           );
                         },
                         icon: const Icon(Icons.book_online_outlined),
                       ),
-                      Text('make booking')
+                      Text('make booking'),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
