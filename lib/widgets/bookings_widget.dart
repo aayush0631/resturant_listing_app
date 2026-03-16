@@ -5,8 +5,9 @@ import 'package:week4/models/resturant_list.dart';
 class BookingsWidget extends StatefulWidget {
   final ResturantList resturant;
   final Function(Booking) onAddBooking;
+  final Booking? existingBookings;
 
-  const BookingsWidget({super.key, required this.resturant,required this.onAddBooking});
+  const BookingsWidget({super.key, required this.resturant,required this.onAddBooking,this.existingBookings});
 
   @override
   State<BookingsWidget> createState() => _BookingsWidgetState();
@@ -20,6 +21,17 @@ class _BookingsWidgetState extends State<BookingsWidget> {
   DateTime? _selectedDate;
 
   @override
+  void initState(){
+    super.initState();
+    if(widget.existingBookings  !=null){
+    _usernameController.text = widget.existingBookings!.customerName;
+    _emailController.text = widget.existingBookings!.customerEmail;
+    _noOfGuestsController.text = widget.existingBookings!.numberOfGuests.toString();
+    _selectedDate = widget.existingBookings!.date;
+    }
+  }
+
+  @override
   void dispose() {
     _usernameController.dispose();
     _emailController.dispose();
@@ -28,21 +40,30 @@ class _BookingsWidgetState extends State<BookingsWidget> {
   }
 
   void _submitForm() {
-    if (_formKey.currentState!.validate()) {
-      final booking = Booking(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-        restaurantId: widget.resturant.id,
-        restaurantName: widget.resturant.name,
+    late final Booking booking;
+    if (widget.existingBookings==null) {
+      if (_formKey.currentState!.validate()) {
+        booking = Booking(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          restaurantId: widget.resturant.id,
+          restaurantName: widget.resturant.name,
+          customerName: _usernameController.text.trim(),
+          customerEmail: _emailController.text.trim(),
+          date: _selectedDate!,
+          numberOfGuests: int.parse(_noOfGuestsController.text),
+        );
+      }
+    }
+    else{
+      booking = widget.existingBookings!.copyWith(
         customerName: _usernameController.text.trim(),
         customerEmail: _emailController.text.trim(),
-        date: _selectedDate!,
+        date: _selectedDate,
         numberOfGuests: int.parse(_noOfGuestsController.text),
       );
-
-      widget.onAddBooking(booking);
-
-      Navigator.pop(context);
     }
+    widget.onAddBooking(booking);
+    Navigator.pop(context);
   }
 
   @override
@@ -71,7 +92,6 @@ class _BookingsWidgetState extends State<BookingsWidget> {
                   ),
                 ),
                 const SizedBox(height: 16),
-
                 // Name
                 TextFormField(
                   controller: _usernameController,
@@ -205,7 +225,7 @@ class _BookingsWidgetState extends State<BookingsWidget> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: _submitForm,
+                    onPressed:_submitForm,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red.shade600,
                       foregroundColor: Colors.white,

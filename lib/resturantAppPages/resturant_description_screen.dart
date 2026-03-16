@@ -54,21 +54,26 @@ class _ResturantDescriptionScreenState extends State<ResturantDescriptionScreen>
                   Text(widget.resturant.contacts),
                   const SizedBox(height: 8),
                   Text("${widget.resturant.totalTables} tables available"),
-                  IconButton(
-                    onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true, 
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                        ),
-                        builder: (context) => BookingsWidget(
-                          resturant: widget.resturant,
-                          onAddBooking:widget.onAddBooking
-                        ),
-                      );
-                    },
-                    icon: const Icon(Icons.book_online_outlined),
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true, 
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                            ),
+                            builder: (context) => BookingsWidget(
+                              resturant: widget.resturant,
+                              onAddBooking:widget.onAddBooking
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.book_online_outlined),
+                      ),
+                      Text('make booking')
+                    ],
                   )
                 ],
               ),

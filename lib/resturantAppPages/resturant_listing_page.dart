@@ -40,6 +40,7 @@ class _Resturantlistingpage extends State<Resturantlistingpage> {
       bookings: widget.bookings,
       onToggleTheme: widget.onToggleTheme,
       themeMode: widget.themeMode,
+      onAddBooking: widget.onAddBooking,
     ),
     const Center(child: Text("Settings coming soon")),
   ];

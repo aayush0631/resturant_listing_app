@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:week4/models/booking.dart';
-import 'package:week4/models/resturant_list.dart'; // 👈 Import to access restaurantData
+import 'package:week4/models/resturant_list.dart';
+import 'package:week4/widgets/bookings_widget.dart'; // 👈 Import to access restaurantData
 
 class BookingsListingScreen extends StatefulWidget {
   final VoidCallback onToggleTheme;
   final ThemeMode themeMode;
   final List<Booking> bookings;
+  final Function(Booking) onAddBooking;
 
   const BookingsListingScreen({
     super.key,
     required this.onToggleTheme,
     required this.themeMode,
     required this.bookings,
+    required this.onAddBooking,
   });
 
   @override
@@ -194,9 +197,29 @@ class BookingsListingScreenState extends State<BookingsListingScreen> {
                         ],
                       ),
                     ),
-                    IconButton(
-                      onPressed: () => alertDialog(booking),
-                        icon: const Icon(Icons.delete),
+                    Column(
+                      children: [
+                        IconButton(
+                          onPressed: () => alertDialog(booking),
+                            icon: const Icon(Icons.delete),
+                        ),
+                        IconButton(
+                          onPressed: () => {
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true, 
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                                ),
+                                builder: (context) => BookingsWidget(
+                                  resturant: resturant,
+                                  onAddBooking:widget.onAddBooking
+                                ),
+                              )
+                            },
+                          icon: Icon(Icons.edit)
+                        ),
+                      ],
                     )
                   ],
                 ),

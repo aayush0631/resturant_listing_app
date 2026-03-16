@@ -16,4 +16,21 @@ class Booking {
     required this.date,
     required this.numberOfGuests,
   });
+
+  Booking copyWith({
+    String? customerName,
+    String? customerEmail,
+    DateTime? date,
+    int? numberOfGuests,
+  }) {
+    return Booking(
+      id: id,                                        
+      restaurantId: restaurantId,                    
+      restaurantName: restaurantName,                
+      customerName: customerName ?? this.customerName,
+      customerEmail: customerEmail ?? this.customerEmail,
+      date: date ?? this.date,
+      numberOfGuests: numberOfGuests ?? this.numberOfGuests, 
+    );
+  }
 }
