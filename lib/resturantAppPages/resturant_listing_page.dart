@@ -55,11 +55,10 @@ class _Resturantlistingpage extends State<Resturantlistingpage> {
             return ResturantWidget(
               resturant: resturant,
               onTap: () {
-                Navigator.push(
+                Navigator.pushNamed(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => ResturantDescriptionScreen(resturant: resturant),
-                  ),
+                  '/description',
+                  arguments: resturant,
                 );
               },
             );

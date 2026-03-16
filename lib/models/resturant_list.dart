@@ -6,13 +6,11 @@ class ResturantList {
   Ratings ratings;
   String description;
   String contacts;
-  String location; 
+  String location;
   String imageUrl;
   int totalTables;
 
-
-
-    ResturantList({
+  ResturantList({
     required this.id,
     required this.name,
     required this.description,
@@ -22,7 +20,6 @@ class ResturantList {
     required this.totalTables,
     required this.ratings,
   });
-
 }
 final List<ResturantList> restaurantData = [
   ResturantList(
