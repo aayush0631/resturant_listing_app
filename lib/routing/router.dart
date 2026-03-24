@@ -8,15 +8,26 @@ class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case Routes.home:
-        final args = settings.arguments as DescriptionScreenArgs  ?;
-        return MaterialPageRoute(builder: (_) => const Scaffold(body: Center(child: Text('Home Screen'))));
-      case Routes.description:
-        final args = settings.arguments as DescriptionScreenArgs;
         return MaterialPageRoute(
-          builder: (context) => ResturantDescriptionScreen(
-            resturant: args.resturant,
-          ),
+          builder: (_) =>
+              const Scaffold(body: Center(child: Text('Home Screen'))),
         );
+      case Routes.description:
+        final args = settings.arguments;
+        if (args is DescriptionScreenArgs) {
+          return MaterialPageRoute(
+            builder: (context) =>
+                ResturantDescriptionScreen(resturant: args.resturant),
+          );
+        } else {
+          return MaterialPageRoute(
+            builder: (_) => const Scaffold(
+              body: Center(
+                child: Text('Invalid arguments for description screen'),
+              ),
+            ),
+          );
+        }
       // Define routes here
       default:
         return MaterialPageRoute(

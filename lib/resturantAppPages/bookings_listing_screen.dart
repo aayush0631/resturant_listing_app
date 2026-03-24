@@ -68,7 +68,7 @@ class BookingsListingScreenState extends State<BookingsListingScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Delete?'),
+        title: const Text('are you sure you wanna delete this booking?'),
         actions: [
           TextButton(
             onPressed: () {

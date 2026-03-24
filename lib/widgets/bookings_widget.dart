@@ -75,6 +75,29 @@ class _BookingsWidgetState extends State<BookingsWidget> {
     }
   }
 
+  void _showconfirmDialog(){
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('are you sure you wanna book?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              _submitForm();
+              Navigator.pop(context);
+            },
+            child: const Text('book'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+        ],
+      ),
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return BottomSheet(
@@ -239,7 +262,7 @@ class _BookingsWidgetState extends State<BookingsWidget> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: _submitForm,
+                    onPressed: _showconfirmDialog,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red.shade600,
                       foregroundColor: Colors.white,
