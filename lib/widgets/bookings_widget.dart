@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:week4/models/booking.dart';
 import 'package:week4/models/resturant_list.dart';
+import 'package:provider/provider.dart';
+import 'package:week4/controller/bookings_controller.dart';
 
 class BookingsWidget extends StatefulWidget {
   final ResturantList resturant;
-  final Function(Booking) onAddBooking;
   final Booking? existingBookings;
 
   const BookingsWidget({
     super.key,
     required this.resturant,
-    required this.onAddBooking,
     this.existingBookings,
   });
 
@@ -19,24 +19,26 @@ class BookingsWidget extends StatefulWidget {
 }
 
 class _BookingsWidgetState extends State<BookingsWidget> {
+
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _noOfGuestsController = TextEditingController();
   DateTime? _selectedDate;
 
+  ///load the values of an existing booking into the form if it exists, else keep the form empty for new booking
   @override
   void initState() {
     super.initState();
     if (widget.existingBookings != null) {
       _usernameController.text = widget.existingBookings!.customerName;
       _emailController.text = widget.existingBookings!.customerEmail;
-      _noOfGuestsController.text = widget.existingBookings!.numberOfGuests
-          .toString();
+      _noOfGuestsController.text = widget.existingBookings!.numberOfGuests.toString();
       _selectedDate = widget.existingBookings!.date;
     }
   }
 
+  /// Dispose controllers to free up resources
   @override
   void dispose() {
     _usernameController.dispose();
@@ -45,10 +47,12 @@ class _BookingsWidgetState extends State<BookingsWidget> {
     super.dispose();
   }
 
+  /// Validate form and submit booking data
   void _submitForm() {
     late final Booking booking;
-    if (widget.existingBookings == null) {
-      if (_formKey.currentState!.validate()) {
+
+    if (_formKey.currentState!.validate()) {
+      if (widget.existingBookings == null) {
         booking = Booking(
           id: DateTime.now().millisecondsSinceEpoch.toString(),
           restaurantId: widget.resturant.id,
@@ -58,17 +62,17 @@ class _BookingsWidgetState extends State<BookingsWidget> {
           date: _selectedDate!,
           numberOfGuests: int.parse(_noOfGuestsController.text),
         );
+      } else {
+        booking = widget.existingBookings!.copyWith(
+          customerName: _usernameController.text.trim(),
+          customerEmail: _emailController.text.trim(),
+          date: _selectedDate,
+          numberOfGuests: int.parse(_noOfGuestsController.text),
+        );
       }
-    } else {
-      booking = widget.existingBookings!.copyWith(
-        customerName: _usernameController.text.trim(),
-        customerEmail: _emailController.text.trim(),
-        date: _selectedDate,
-        numberOfGuests: int.parse(_noOfGuestsController.text),
-      );
+      context.read<BookingsController>().addBooking(booking);
+      Navigator.pop(context);
     }
-    widget.onAddBooking(booking);
-    Navigator.pop(context);
   }
 
   @override
@@ -77,14 +81,11 @@ class _BookingsWidgetState extends State<BookingsWidget> {
       onClosing: () {},
       builder: (context) {
         return SingleChildScrollView(
-          // 👈 prevents overflow when keyboard opens
           padding: EdgeInsets.only(
             left: 20,
             right: 20,
             top: 20,
-            bottom:
-                MediaQuery.of(context).viewInsets.bottom +
-                20, // 👈 keyboard push up
+            bottom: MediaQuery.of(context).viewInsets.bottom + 20,
           ),
           child: Form(
             key: _formKey,
@@ -100,14 +101,12 @@ class _BookingsWidgetState extends State<BookingsWidget> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                // Name
-                TextFormField(
+
+                /// Name
+                FormInputField(
                   controller: _usernameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Name',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.person),
-                  ),
+                  label: 'Name',
+                  icon: Icons.person,
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
                       return 'Please enter your name';
@@ -120,19 +119,17 @@ class _BookingsWidgetState extends State<BookingsWidget> {
                 ),
                 const SizedBox(height: 16),
 
-                // Email
-                TextFormField(
+                /// Email
+                FormInputField(
                   controller: _emailController,
+                  label: 'Email',
+                  icon: Icons.email,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.email),
-                  ),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
                       return 'Please enter your email';
                     }
+
                     final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
                     if (!emailRegex.hasMatch(value.trim())) {
                       return 'Please enter a valid email';
@@ -140,17 +137,15 @@ class _BookingsWidgetState extends State<BookingsWidget> {
                     return null;
                   },
                 ),
+
                 const SizedBox(height: 16),
 
-                // No of Guests
-                TextFormField(
+                /// Guests
+                FormInputField(
                   controller: _noOfGuestsController,
+                  label: 'No of Guests',
+                  icon: Icons.group,
                   keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    labelText: 'No of Guests',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.group),
-                  ),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
                       return 'Please enter number of guests';
@@ -167,7 +162,7 @@ class _BookingsWidgetState extends State<BookingsWidget> {
                 ),
                 const SizedBox(height: 16),
 
-                // Date — using FormField so it validates with the rest of the form
+                /// Date picker
                 FormField<DateTime>(
                   validator: (value) {
                     if (value == null) return 'Please select a date';
@@ -187,18 +182,16 @@ class _BookingsWidgetState extends State<BookingsWidget> {
                                 const Duration(days: 30),
                               ),
                             );
+
                             if (picked != null) {
                               setState(() => _selectedDate = picked);
-                              state.didChange(
-                                picked,
-                              );
+                              state.didChange(picked);
                             }
                           },
                           child: Container(
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
                               border: Border.all(
-                                // 👈 red border if error, grey if not
                                 color: state.hasError
                                     ? Colors.red
                                     : Colors.grey,
@@ -243,7 +236,6 @@ class _BookingsWidgetState extends State<BookingsWidget> {
                   },
                 ),
                 const SizedBox(height: 20),
-
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -258,12 +250,45 @@ class _BookingsWidgetState extends State<BookingsWidget> {
                     child: const Text('Confirm Booking'),
                   ),
                 ),
+
                 const SizedBox(height: 8),
               ],
             ),
           ),
         );
       },
+    );
+  }
+}
+
+/// Reusable form input widget
+class FormInputField extends StatelessWidget {
+  final TextEditingController controller;
+  final String label;
+  final IconData icon;
+  final TextInputType? keyboardType;
+  final String? Function(String?) validator;
+
+  const FormInputField({
+    super.key,
+    required this.controller,
+    required this.label,
+    required this.icon,
+    required this.validator,
+    this.keyboardType,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: keyboardType,
+      decoration: InputDecoration(
+        labelText: label,
+        border: const OutlineInputBorder(),
+        prefixIcon: Icon(icon),
+      ),
+      validator: validator,
     );
   }
 }

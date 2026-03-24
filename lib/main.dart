@@ -1,24 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:week4/controller/bookings_controller.dart';
 import 'package:week4/models/booking.dart';
-// import 'package:week4/models/exercise1.dart';
-// import 'package:week4/week4/exercise2.dart';
 import 'package:week4/resturantAppPages/resturant_listing_page.dart';
 import 'package:week4/resturantAppPages/resturant_description_screen.dart';
 import 'package:week4/models/resturant_list.dart';
+import 'package:provider/provider.dart';
+import 'package:week4/routing/routes.dart';
+import 'package:week4/routing/router.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => BookingsController(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
-
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
   ThemeMode _themeMode = ThemeMode.light;
+  final List<Booking> _bookings = [];
 
   void _toggleTheme() {
     setState(() {
@@ -26,11 +33,6 @@ class _MyAppState extends State<MyApp> {
           ? ThemeMode.dark
           : ThemeMode.light;
     });
-  }
-
-  final List<Booking> _bookings = [];
-  void _addBooking(Booking booking) {
-    setState(() => _bookings.add(booking)); // 👈 Updates everywhere
   }
 
   @override
@@ -41,34 +43,13 @@ class _MyAppState extends State<MyApp> {
       themeMode: _themeMode,
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => Resturantlistingpage(
-          bookings: _bookings,
-          onAddBooking: _addBooking,
-          onToggleTheme: _toggleTheme,
-          themeMode: _themeMode,
-        ),
-        '/description': (context) {
-          final args =
-              ModalRoute.of(context)!.settings.arguments
-                  as Map<String, dynamic>; // 👈 Map not ResturantList
-          return ResturantDescriptionScreen(
-            resturant: args['resturant'] as ResturantList,
-            onAddBooking:
-                args['onAddBooking'] as Function(Booking), // 👈 Pass it down
-          );
-        },
-      },
+      home: Resturantlistingpage(
+        bookings: _bookings,
+        onToggleTheme: _toggleTheme,
+        themeMode: _themeMode,
+      ),
+      initialRoute: Routes.home,
+      onGenerateRoute: AppRouter.generateRoute,
     );
   }
 }
-
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-
-//     @override
-//   Widget build(BuildContext context) {
-//     return const MaterialApp(home: ShopScreen(user: user1,product: [product1],));
-//   }
-// }

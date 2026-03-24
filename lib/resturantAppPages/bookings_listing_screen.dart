@@ -63,7 +63,7 @@ class BookingsListingScreenState extends State<BookingsListingScreen> {
       widget.bookings.remove(booking);
     });
   }
-
+  ///returns a dialog to confirm deletion of a booking
   void _showDeleteDialog(Booking booking) {
     showDialog(
       context: context,
@@ -96,7 +96,7 @@ class BookingsListingScreenState extends State<BookingsListingScreen> {
             Icon(Icons.book_online_outlined, size: 64, color: Colors.grey),
             SizedBox(height: 12),
             Text(
-              "No bookings yet!",
+              'No bookings yet!',
               style: TextStyle(fontSize: 18, color: Colors.grey),
             ),
           ],
@@ -196,7 +196,6 @@ class BookingsListingScreenState extends State<BookingsListingScreen> {
                           ),
                           builder: (context) => BookingsWidget(
                             resturant: resturant,
-                            onAddBooking: widget.onAddBooking,
                             existingBookings: booking,
                           ),
                         );
