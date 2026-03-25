@@ -51,12 +51,9 @@ class _Resturantlistingpage extends State<Resturantlistingpage> {
     List<Widget> pages = [
       _RestaurantListBody(onAddBooking: context.read<BookingsController>().addBooking),
       BookingsListingScreen(
-        bookings: context.read<BookingsController>().bookings,
         onToggleTheme: widget.onToggleTheme,
         themeMode: widget.themeMode,
-        onAddBooking: context.read<BookingsController>().addBooking,
       ),
-      const Center(child: Text('Settings coming soon')),
     ];
 
     return Scaffold(

@@ -16,12 +16,14 @@ class AppBottomBar extends StatelessWidget {
       currentIndex: currentIndex,
       onTap: onTap,
       items: [
-        BottomNavigationBarItem(icon: Icon(Icons.list), label: 'list'),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.list),
+          label: 'list'
+        ),
         BottomNavigationBarItem(
           icon: Icon(Icons.check_circle),
           label: 'bookings',
         ),
-        BottomNavigationBarItem(icon: Icon(Icons.pending), label: 'settings'),
       ],
     );
   }

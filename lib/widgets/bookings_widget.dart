@@ -19,7 +19,6 @@ class BookingsWidget extends StatefulWidget {
 }
 
 class _BookingsWidgetState extends State<BookingsWidget> {
-
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -33,7 +32,8 @@ class _BookingsWidgetState extends State<BookingsWidget> {
     if (widget.existingBookings != null) {
       _usernameController.text = widget.existingBookings!.customerName;
       _emailController.text = widget.existingBookings!.customerEmail;
-      _noOfGuestsController.text = widget.existingBookings!.numberOfGuests.toString();
+      _noOfGuestsController.text = widget.existingBookings!.numberOfGuests
+          .toString();
       _selectedDate = widget.existingBookings!.date;
     }
   }
@@ -75,7 +75,7 @@ class _BookingsWidgetState extends State<BookingsWidget> {
     }
   }
 
-  void _showconfirmDialog(){
+  void _showconfirmDialog() {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -96,7 +96,6 @@ class _BookingsWidgetState extends State<BookingsWidget> {
       ),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -137,6 +136,12 @@ class _BookingsWidgetState extends State<BookingsWidget> {
                     if (value.trim().length < 2) {
                       return 'Name must be at least 2 characters';
                     }
+                    if (value.trim().length > 100) {
+                      return 'Name must be less than 100 characters'; 
+                    }
+                    if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(value.trim())) {
+                      return 'Name can only contain letters and spaces';
+                    }
                     return null;
                   },
                 ),
@@ -152,8 +157,17 @@ class _BookingsWidgetState extends State<BookingsWidget> {
                     if (value == null || value.trim().isEmpty) {
                       return 'Please enter your email';
                     }
-
-                    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+                    // This regex validates a typical email address:
+                    // ^                 → Start of the string
+                    // [a-zA-Z0-9._+%-]+ → Local part (before @), allows letters, digits, ., _, +, %, -
+                    // @                 → Literal '@' character
+                    // [a-zA-Z0-9.-]+    → Domain name part, allows letters, digits, ., -
+                    // \.                → Literal dot '.' separating domain and top-level domain
+                    // [a-zA-Z]{2,}      → Top-level domain (like com, org, net), at least 2 letters
+                    // $                 → End of the string
+                    final emailRegex = RegExp(
+                      r'^[a-zA-Z0-9._+%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                    );
                     if (!emailRegex.hasMatch(value.trim())) {
                       return 'Please enter a valid email';
                     }

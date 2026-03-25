@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:week4/models/booking.dart';
 import 'package:week4/models/resturant_list.dart';
 import 'package:week4/widgets/bookings_widget.dart';
+import 'package:provider/provider.dart';
+import 'package:week4/controller/bookings_controller.dart';
 
 /// Reusable Icon + Text widget
 class IconText extends StatelessWidget {
@@ -42,15 +44,11 @@ class IconText extends StatelessWidget {
 class BookingsListingScreen extends StatefulWidget {
   final VoidCallback onToggleTheme;
   final ThemeMode themeMode;
-  final List<Booking> bookings;
-  final Function(Booking) onAddBooking;
 
   const BookingsListingScreen({
     super.key,
     required this.onToggleTheme,
     required this.themeMode,
-    required this.bookings,
-    required this.onAddBooking,
   });
 
   @override
@@ -60,7 +58,7 @@ class BookingsListingScreen extends StatefulWidget {
 class BookingsListingScreenState extends State<BookingsListingScreen> {
   void _deleteBooking(Booking booking) {
     setState(() {
-      widget.bookings.remove(booking);
+      context.read<BookingsController>().removeBooking(booking);
     });
   }
   ///returns a dialog to confirm deletion of a booking
@@ -88,7 +86,8 @@ class BookingsListingScreenState extends State<BookingsListingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.bookings.isEmpty) {
+    final bookings = context.watch<BookingsController>().bookings;
+    if (bookings.isEmpty) {
       return const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -105,9 +104,9 @@ class BookingsListingScreenState extends State<BookingsListingScreen> {
     }
     return ListView.builder(
       padding: const EdgeInsets.symmetric(vertical: 10),
-      itemCount: widget.bookings.length,
+      itemCount: bookings.length,
       itemBuilder: (context, index) {
-        final booking = widget.bookings[index];
+        final booking = bookings[index];
         final resturant = restaurantData.firstWhere(
           (r) => r.id == booking.restaurantId,
           orElse: () => restaurantData.first,
