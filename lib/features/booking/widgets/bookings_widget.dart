@@ -229,7 +229,7 @@ class _BookingsWidgetState extends State<BookingsWidget> {
                                   style: TextStyle(
                                     color: _selectedDate == null
                                         ? Colors.grey
-                                        : Colors.black,
+                                        : Theme.of(context).textTheme.bodyLarge?.color,
                                     fontSize: 16,
                                   ),
                                 ),

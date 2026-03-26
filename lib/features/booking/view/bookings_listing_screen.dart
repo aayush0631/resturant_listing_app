@@ -141,7 +141,7 @@ class BookingsListingScreenState extends State<BookingsListingScreen> {
                     ),
                     IconButton(
                       onPressed: () async {
-                        await showModalBottomSheet(
+                        final edited =await showModalBottomSheet(
                           context: context,
                           isScrollControlled: true,
                           shape: const RoundedRectangleBorder(
@@ -154,7 +154,10 @@ class BookingsListingScreenState extends State<BookingsListingScreen> {
                             existingBookings: booking,
                           ),
                         );
-                        _deleteBooking(booking);
+                        if (edited == true) {
+                          // For simplicity, we delete the old booking and expect the user to create a new one with the updated details.
+                          _deleteBooking(booking);
+                        }
                       },
                       icon: const Icon(Icons.edit),
                     ),
