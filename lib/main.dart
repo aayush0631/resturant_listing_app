@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:week4/controller/bookings_controller.dart';
-import 'package:week4/models/booking.dart';
-import 'package:week4/resturantAppPages/resturant_listing_page.dart';
-import 'package:week4/resturantAppPages/resturant_description_screen.dart';
-import 'package:week4/models/resturant_list.dart';
+import 'package:week4/features/booking/viewmodel/bookings_viewmodel.dart';
+import 'package:week4/data/models/booking.dart';
+import 'package:week4/data/models/restaurant.dart';
 import 'package:provider/provider.dart';
 import 'package:week4/routing/routes.dart';
 import 'package:week4/routing/router.dart';
 import 'package:flutter/services.dart';
+import 'package:week4/features/booking/view/bookings_listing_screen.dart';
+import 'package:week4/core/widgets/form_input_widget.dart';
+import 'package:week4/features/booking/widgets/bookings_widget.dart';
+import 'package:week4/features/restaurant/view/resturant_listing_page.dart';
 
 void main() {
   runApp(

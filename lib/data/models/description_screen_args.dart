@@ -1,4 +1,4 @@
-import 'package:week4/models/resturant_list.dart';
+import 'package:week4/data/models/restaurant.dart';
 
 class DescriptionScreenArgs {
   final ResturantList resturant;

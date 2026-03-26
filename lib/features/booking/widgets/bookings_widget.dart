@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:week4/models/booking.dart';
-import 'package:week4/models/resturant_list.dart';
+import 'package:week4/data/models/booking.dart';
+import 'package:week4/data/models/restaurant.dart';
 import 'package:provider/provider.dart';
-import 'package:week4/controller/bookings_controller.dart';
+import 'package:week4/features/booking/viewmodel/bookings_viewmodel.dart';
+import 'package:week4/core/widgets/form_input_widget.dart';
+import 'package:week4/core/widgets/confirmation_dialog.dart';
 
 class BookingsWidget extends StatefulWidget {
   final ResturantList resturant;
@@ -73,28 +75,6 @@ class _BookingsWidgetState extends State<BookingsWidget> {
       context.read<BookingsController>().addBooking(booking);
       Navigator.pop(context);
     }
-  }
-
-  void _showconfirmDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('are you sure you wanna book?'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              _submitForm();
-              Navigator.pop(context);
-            },
-            child: const Text('book'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-        ],
-      ),
-    );
   }
 
   @override
@@ -276,7 +256,27 @@ class _BookingsWidgetState extends State<BookingsWidget> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: _showconfirmDialog,
+                    onPressed: () async {
+                      if (!_formKey.currentState!.validate()) return;
+                      if (_selectedDate == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Please select a date'),
+                          ),
+                        );
+                        return;
+                      }
+                      final confirm = await conformationDialog(
+                        context: context,
+                        title: 'Confirm Booking',
+                        content:
+                          'Are you sure you want to book a table at ${widget.resturant.name} on ${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year} for ${_noOfGuestsController.text} guests?',
+                        confirmText: 'Book',
+                      );
+                      if (confirm == true) {
+                        _submitForm();
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red.shade600,
                       foregroundColor: Colors.white,
@@ -294,38 +294,6 @@ class _BookingsWidgetState extends State<BookingsWidget> {
           ),
         );
       },
-    );
-  }
-}
-
-/// Reusable form input widget
-class FormInputField extends StatelessWidget {
-  final TextEditingController controller;
-  final String label;
-  final IconData icon;
-  final TextInputType? keyboardType;
-  final String? Function(String?) validator;
-
-  const FormInputField({
-    super.key,
-    required this.controller,
-    required this.label,
-    required this.icon,
-    required this.validator,
-    this.keyboardType,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      keyboardType: keyboardType,
-      decoration: InputDecoration(
-        labelText: label,
-        border: const OutlineInputBorder(),
-        prefixIcon: Icon(icon),
-      ),
-      validator: validator,
     );
   }
 }

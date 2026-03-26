@@ -1,41 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:week4/models/resturant_list.dart';
-import 'package:week4/widgets/bookings_widget.dart';
-import 'package:week4/models/booking.dart';
+import 'package:week4/data/models/booking.dart';
+import 'package:week4/data/models/restaurant.dart';
+import 'package:provider/provider.dart';
+import 'package:week4/features/booking/widgets/bookings_widget.dart';
 
-class ResturantDescriptionScreen extends StatefulWidget {
+class ResturantDescriptionScreen extends StatelessWidget {
   final ResturantList resturant;
+
   const ResturantDescriptionScreen({
     super.key,
     required this.resturant,
   });
 
   @override
-  State<ResturantDescriptionScreen> createState() =>
-      _ResturantDescriptionScreenState();
-}
-
-class _ResturantDescriptionScreenState
-  extends State<ResturantDescriptionScreen> {
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Restaurants'),
         centerTitle: true,
-        backgroundColor: Colors.red.shade600,
-        elevation: 4,
-        foregroundColor: Colors.white,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
-        ),
+        backgroundColor: Colors.red,
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Image.network(
-              widget.resturant.imageUrl,
+              resturant.imageUrl,
               width: double.infinity,
               height: 250,
               fit: BoxFit.cover,
@@ -46,22 +36,22 @@ class _ResturantDescriptionScreenState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.resturant.name,
+                    resturant.name,
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text(widget.resturant.ratings.name),
+                  Text(resturant.ratings.name),
                   const SizedBox(height: 8),
-                  Text(widget.resturant.description),
+                  Text(resturant.description),
                   const SizedBox(height: 8),
-                  Text(widget.resturant.location),
+                  Text(resturant.location),
                   const SizedBox(height: 8),
-                  Text(widget.resturant.contacts),
+                  Text(resturant.contacts),
                   const SizedBox(height: 8),
-                  Text('${widget.resturant.totalTables} tables available'),
+                  Text('${resturant.totalTables} tables available'),
                   Row(
                     children: [
                       IconButton(
@@ -75,13 +65,13 @@ class _ResturantDescriptionScreenState
                               ),
                             ),
                             builder: (context) => BookingsWidget(
-                              resturant: widget.resturant,
-                              ),
+                              resturant: resturant,
+                            ),
                           );
                         },
                         icon: const Icon(Icons.book_online_outlined),
                       ),
-                      Text('make booking'),
+                      const Text('make booking'),
                     ],
                   ),
                 ],

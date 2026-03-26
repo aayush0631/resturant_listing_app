@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:week4/models/resturant_list.dart';
+import 'package:week4/data/models/booking.dart';
+import 'package:week4/data/models/restaurant.dart';
 
 class ResturantWidget extends StatelessWidget {
   const ResturantWidget({

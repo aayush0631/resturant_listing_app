@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:week4/main.dart';
 import 'package:week4/routing/routes.dart';
-import 'package:week4/resturantAppPages/resturant_description_screen.dart';
-import 'package:week4/models/description_screen_args.dart';
+import 'package:week4/data/models/description_screen_args.dart';
+import 'package:week4/features/restaurant/view/resturant_description_screen.dart';
 
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {

@@ -1,44 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:week4/models/booking.dart';
-import 'package:week4/models/resturant_list.dart';
-import 'package:week4/widgets/bookings_widget.dart';
+import 'package:week4/data/models/booking.dart';
+import 'package:week4/data/models/restaurant.dart';
 import 'package:provider/provider.dart';
-import 'package:week4/controller/bookings_controller.dart';
-
-/// Reusable Icon + Text widget
-class IconText extends StatelessWidget {
-  final IconData icon;
-  final String text;
-  final Color? iconColor;
-  final double iconSize;
-  final TextStyle? textStyle;
-
-  const IconText({
-    super.key,
-    required this.icon,
-    required this.text,
-    this.iconColor,
-    this.iconSize = 15,
-    this.textStyle,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(icon, color: iconColor ?? Colors.grey, size: iconSize),
-        const SizedBox(width: 4),
-        Expanded(
-          child: Text(
-            text,
-            overflow: TextOverflow.ellipsis,
-            style: textStyle ?? const TextStyle(fontSize: 13),
-          ),
-        ),
-      ],
-    );
-  }
-}
+import 'package:week4/core/widgets/form_input_widget.dart';
+import 'package:week4/features/booking/viewmodel/bookings_viewmodel.dart';
+import 'package:week4/features/booking/widgets/bookings_widget.dart';
+import 'package:week4/core/widgets/icon_text_widget.dart';
+import 'package:week4/core/widgets/confirmation_dialog.dart';
 
 /// Main screen showing list of bookings
 class BookingsListingScreen extends StatefulWidget {
@@ -60,28 +28,6 @@ class BookingsListingScreenState extends State<BookingsListingScreen> {
     setState(() {
       context.read<BookingsController>().removeBooking(booking);
     });
-  }
-  ///returns a dialog to confirm deletion of a booking
-  void _showDeleteDialog(Booking booking) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('are you sure you wanna delete this booking?'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              _deleteBooking(booking);
-              Navigator.pop(context);
-            },
-            child: const Text('Delete'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-        ],
-      ),
-    );
   }
 
   @override
@@ -180,8 +126,18 @@ class BookingsListingScreenState extends State<BookingsListingScreen> {
                 Column(
                   children: [
                     IconButton(
-                      onPressed: () => _showDeleteDialog(booking),
-                      icon: const Icon(Icons.delete),
+                      onPressed: () async {
+                        final confirmed = await conformationDialog(
+                          context: context,
+                          title: 'Delete Booking',
+                          content: 'Are you sure you want to delete this booking for ${resturant.name} on ${booking.date.day}/${booking.date.month}/${booking.date.year}?',
+                          confirmText: 'Delete',
+                        );
+                        if (confirmed == true) {
+                          _deleteBooking(booking);
+                        }
+                      },
+                      icon: const Icon(Icons.delete, color: Colors.redAccent) ,
                     ),
                     IconButton(
                       onPressed: () async {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:week4/models/booking.dart';
+import 'package:week4/data/models/booking.dart';
 
 class BookingsController extends ChangeNotifier{
   final List<Booking> _bookings = [];

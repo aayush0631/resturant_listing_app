@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:week4/widgets/app_bottom_bar.dart';
-import 'package:week4/models/resturant_list.dart';
-import 'package:week4/widgets/resturant_card_widget.dart';
-import 'package:week4/models/booking.dart';
-import 'package:week4/resturantAppPages/bookings_listing_screen.dart';
+import 'package:week4/data/models/booking.dart';
+import 'package:week4/features/booking/view/bookings_listing_screen.dart';
 import 'package:week4/main.dart';
 import 'package:week4/routing/routes.dart';
-import 'package:week4/models/description_screen_args.dart';
 import 'package:provider/provider.dart';
-import 'package:week4/controller/bookings_controller.dart';
+import 'package:week4/core/widgets/form_input_widget.dart';
+import 'package:week4/features/booking/viewmodel/bookings_viewmodel.dart';
+import 'package:week4/features/booking/widgets/bookings_widget.dart';
+import 'package:week4/data/models/restaurant.dart';
+import 'package:week4/core/widgets/app_bottom_bar.dart';
+import 'package:week4/features/restaurant/widgets/resturant_card_widget.dart';
+import 'package:week4/data/models/description_screen_args.dart';
+import 'package:week4/features/restaurant/view/resturant_description_screen.dart';
 
 /// The main page displaying a list of restaurants and navigation tabs.
 ///
@@ -49,7 +52,7 @@ class _Resturantlistingpage extends State<Resturantlistingpage> {
   @override
   Widget build(BuildContext context) {
     List<Widget> pages = [
-      _RestaurantListBody(onAddBooking: context.read<BookingsController>().addBooking),
+      _RestaurantListBody(),
       BookingsListingScreen(
         onToggleTheme: widget.onToggleTheme,
         themeMode: widget.themeMode,
@@ -91,10 +94,6 @@ class _Resturantlistingpage extends State<Resturantlistingpage> {
 /// Uses [ResturantWidget] for each restaurant item, and
 /// navigates to [DescriptionScreenArgs] when tapped.
 class _RestaurantListBody extends StatelessWidget {
-  /// Callback to add a new [Booking] when a restaurant is selected.
-  final Function(Booking) onAddBooking;
-
-  const _RestaurantListBody({required this.onAddBooking});
 
   @override
   Widget build(BuildContext context) {

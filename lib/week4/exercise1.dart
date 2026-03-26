@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:week4/models/exercise1.dart';
+import 'package:week4/data/models/exercise1.dart';
 // import 'package:week4/models/exercise1.dart';
 
 class ShopScreen extends StatelessWidget {
